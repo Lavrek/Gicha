@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: GIChA
+  description: Genshin Impact Characters Application - GIChA -  is a Spring Boot application to manage characters from Genshin Impact.
+  contact:
+    name: Ing. Ekaterina Lavrova
+    email: lavrova@seznam.cz
+  version: 1.0.0
+tags:
+  - name: Character
+    description: Character registered in system
+  - name: Characters
+    description: All characters
+servers:
+  - url: http://localhost:8080
+paths:
+  /character:
+    post:
+      tags:
+        - Character
+      summary: Add a new Character
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/character'
+      responses:
+        201:
+          description: Character successfully added
+    put:
+      tags:
+        - Character
+      summary: Update an existing Character
+      requestBody:
+        content:
+          application/jason:
+            schema:
+              $ref: '#/components/schemas/character'
+      responses:
+        202:
+          description: Character successfully added
+  /character{id}:
+    get:
+      tags:
+        - Character
+      summary: Get Character based on id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Successfull response with path param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/character'
+        400:
+          description: Invalid id
+    delete:
+      tags:
+        - Character
+      summary: Delete a Character based on id
+      parameters:
+        - in: path
+          name: id
+          description: Character id to delete
+          required: true
+          schema:
+            type: number
+      responses:
+        204:
+          description: Character deleted successfully
+        404:
+          description: Character not found
+        403:
+          description: Unauthorized user
+        401:
+          description: User does not have access rights
+  /characters:
+    get:
+      tags:
+        - Characters
+      summary: Get all characters from the system
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/characters'
+  /characters{birthplace}:
+    get:
+      tags:
+        - Characters
+      summary: Get all characters from any location
+      parameters:
+        - in: path
+          name: birthplace
+          required: true
+          schema:
+            type: string
+            enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
+            example: Inazuma
+      responses:
+        200:
+          description: Successfull response with param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/characters'
+        404:
+          description: Character not found
+  /characters{element}:
+    get:
+      tags:
+        - Characters
+      summary: Get all characters with same element
+      parameters:
+        - in: path
+          name: element
+          required: true
+          schema:
+            type: string
+            enum: ['ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO']
+            example: PYRO
+      responses:
+        200:
+          description: Successfull response with param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/characters'
+        404:
+          description: Character not found
+  /character{birthplace}:
+    get:
+      tags:
+        - Character
+      summary: Get character by location
+      parameters:
+        - in: path
+          name: birthplace
+          required: true
+          schema:
+            type: string
+            enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
+            example: Inazuma
+      responses:
+        404:
+          description: Character not found
+        200:
+          description: Successfull response with param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/character'
+
+components:
+  schemas:
+    character:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 3
+        name:
+          type: string
+          example: Venti
+        element:
+          type: string
+          enum: ['ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO']
+          example: PYRO
+        birthplace:
+          type: string
+          enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
+          example: Inazuma
+    characters:
+      type: array
+      items:
+        $ref: '#/components/schemas/character'
