@@ -1,4 +1,4 @@
-INSERT INTO characters (name, element, birthplace) VALUES ('Traveler', 'ADAPTIVE', 'UNIVERSE');
-INSERT INTO characters (name, element, birthplace) VALUES ('Amber','PYRO', 'MONDSTADT');
-INSERT INTO characters (name, element, birthplace) VALUES ('Lisa', 'ELECTRO', 'MONDSTADT');
-INSERT INTO characters (name, element, birthplace) VALUES ('Kaeya','CRYO', 'UNKNOWN');
+INSERT INTO Characters (name, element, birthplace) VALUES ( 'Traveler', 'ADAPTIVE', 'UNIVERSE');
+INSERT INTO Characters (name, element, birthplace) VALUES (2, 'Amber','PYRO', 'MONDSTADT');
+INSERT INTO Characters (name, element, birthplace) VALUES (3, 'Lisa', 'ELECTRO', 'MONDSTADT');
+INSERT INTO Characters (name, element, birthplace) VALUES (4, 'Kaeya','CRYO', 'UNKNOWN');
