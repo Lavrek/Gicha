@@ -1,5 +1,7 @@
 package Gicha.model.character;
-
+/**
+ * Enum class for character element.
+ */
 public enum Element {
     ANEMO,
     GEO,
@@ -7,5 +9,6 @@ public enum Element {
     DENDRO,
     HYDRO,
     PYRO,
-    CRYO;
+    CRYO,
+    ADAPTIVE;
 }

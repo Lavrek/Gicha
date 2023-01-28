@@ -27,18 +27,7 @@ paths:
       responses:
         201:
           description: Character successfully added
-    put:
-      tags:
-        - Character
-      summary: Update an existing Character
-      requestBody:
-        content:
-          application/jason:
-            schema:
-              $ref: '#/components/schemas/character'
-      responses:
-        202:
-          description: Character successfully added
+
   /character{id}:
     get:
       tags:
@@ -79,6 +68,24 @@ paths:
           description: Unauthorized user
         401:
           description: User does not have access rights
+    put:
+      tags:
+        - Character
+      summary: Update an existing Character
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/jason:
+            schema:
+              $ref: '#/components/schemas/character'
+      responses:
+        202:
+          description: Character successfully added
   /characters:
     get:
       tags:
@@ -102,11 +109,11 @@ paths:
           required: true
           schema:
             type: string
-            enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
-            example: Inazuma
+            enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA' ]
+            example: INAZUMA
       responses:
         200:
-          description: Successfull response with param
+          description: Successful response with param
           content:
             application/json:
               schema:
@@ -124,59 +131,38 @@ paths:
           required: true
           schema:
             type: string
-            enum: ['ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO']
+            enum: [ 'ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO' ]
             example: PYRO
       responses:
         200:
-          description: Successfull response with param
+          description: Successful response with param
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/characters'
         404:
           description: Character not found
-  /character{birthplace}:
-    get:
-      tags:
-        - Character
-      summary: Get character by location
-      parameters:
-        - in: path
-          name: birthplace
-          required: true
-          schema:
-            type: string
-            enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
-            example: Inazuma
-      responses:
-        404:
-          description: Character not found
-        200:
-          description: Successfull response with param
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/character'
 
 components:
   schemas:
     character:
       type: object
       properties:
-        id:
+        Id:
           type: number
           example: 3
-        name:
+        Name:
           type: string
           example: Venti
-        element:
+        Element:
           type: string
-          enum: ['ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO']
-          example: PYRO
-        birthplace:
+          enum: [ 'ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO' ]
+          example: ANEMO
+        Birthplace:
           type: string
-          enum: ['MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA']
-          example: Inazuma
+          enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA', 'UNIVERSE',
+                  'UNKNOWN' ]
+          example: MONDSTADT
     characters:
       type: array
       items:

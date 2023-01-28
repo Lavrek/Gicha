@@ -1,5 +1,7 @@
 package Gicha.model.character;
-
+/**
+ * Enum class for character birthplace.
+ */
 public enum Birthplace {
     MONDSTADT,
     LIYUE,

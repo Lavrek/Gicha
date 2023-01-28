@@ -2,7 +2,12 @@ package Gicha;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+/**
+ * GIChA Spring Boot Application.
+ *
+ * @author Lavrek
+ *
+ */
 @SpringBootApplication
 public class GichaApplication {
 
