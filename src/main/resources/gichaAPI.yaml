@@ -9,8 +9,6 @@ info:
 tags:
   - name: Character
     description: Character registered in system
-  - name: Characters
-    description: All characters
 servers:
   - url: http://localhost:8080
 paths:
@@ -23,12 +21,122 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/character'
+              $ref: '#/components/schemas/Character'
       responses:
         201:
           description: Character successfully added
-
-  /character{id}:
+    get:
+      tags:
+        - Character
+      summary: Get Character based on name
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfull response with path param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        400:
+          description: Invalid name
+  /character/allcharacters:
+    get:
+      tags:
+        - Character
+      summary: Get all characters from the system
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Characters'
+  /character/name/{id}:
+    patch:
+      tags:
+        - Character
+      summary: Update an existing Character name
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: Character name updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        404:
+          description: Character not found
+  /character/birthplace/{id}:
+    patch:
+      tags:
+        - Character
+      summary: Update an existing Character birthplace
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: birthplace
+          required: true
+          schema:
+            type: string
+            enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA', 'UNIVERSE', 'UNKNOWN' ]
+      responses:
+        202:
+          description: Character birthplace updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        404:
+          description: Character not found
+  /character/element/{id}:
+    patch:
+      tags:
+        - Character
+      summary: Update an existing Character element
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: element
+          required: true
+          schema:
+            type: string
+            enum: [ 'ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO' ]
+      responses:
+        202:
+          description: Character element updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        404:
+          description: Character not found
+  /character/{id}:
     get:
       tags:
         - Character
@@ -38,14 +146,15 @@ paths:
           name: id
           required: true
           schema:
-            type: number
+            type: integer
+            format: int64
       responses:
         200:
           description: Successfull response with path param
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/character'
+                $ref: '#/components/schemas/Character'
         400:
           description: Invalid id
     delete:
@@ -58,7 +167,8 @@ paths:
           description: Character id to delete
           required: true
           schema:
-            type: number
+            type: integer
+            format: int64
       responses:
         204:
           description: Character deleted successfully
@@ -77,31 +187,24 @@ paths:
           name: id
           required: true
           schema:
-            type: number
+            type: integer
+            format: int64
       requestBody:
         content:
           application/jason:
             schema:
-              $ref: '#/components/schemas/character'
+              $ref: '#/components/schemas/Character'
       responses:
         202:
           description: Character successfully added
-  /characters:
-    get:
-      tags:
-        - Characters
-      summary: Get all characters from the system
-      responses:
-        200:
-          description: Success Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/characters'
-  /characters{birthplace}:
+                $ref: '#/components/schemas/Character'
+  /character/{birthplace}:
     get:
       tags:
-        - Characters
+        - Character
       summary: Get all characters from any location
       parameters:
         - in: path
@@ -109,21 +212,20 @@ paths:
           required: true
           schema:
             type: string
-            enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA' ]
-            example: INAZUMA
+            enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA', 'UNIVERSE', 'UNKNOWN' ]
       responses:
         200:
           description: Successful response with param
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/characters'
+                $ref: '#/components/schemas/Characters'
         404:
           description: Character not found
-  /characters{element}:
+  /character/{element}:
     get:
       tags:
-        - Characters
+        - Character
       summary: Get all characters with same element
       parameters:
         - in: path
@@ -139,31 +241,36 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/characters'
+                $ref: '#/components/schemas/Characters'
         404:
           description: Character not found
-
 components:
   schemas:
-    character:
+    Character:
       type: object
+      required:
+        - id
+        - name
+        - element
+        - birthplace
       properties:
-        Id:
-          type: number
-          example: 3
-        Name:
+        id:
+          readOnly: true
+          type: integer
+          format: int64
+          example: 34236599
+        name:
           type: string
           example: Venti
-        Element:
+        element:
           type: string
           enum: [ 'ADAPTIVE','PYRO','CRYO','ELECTRO','HYDRO','DENDRO','GEO','ANEMO' ]
           example: ANEMO
-        Birthplace:
+        birthplace:
           type: string
-          enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA', 'UNIVERSE',
-                  'UNKNOWN' ]
+          enum: [ 'MONDSTADT','LIYUE','INAZUMA','SUMERU','FONTAINE','NATLAN','SNEZHNAYA', 'UNIVERSE','UNKNOWN' ]
           example: MONDSTADT
-    characters:
+    Characters:
       type: array
       items:
-        $ref: '#/components/schemas/character'
+        $ref: '#/components/schemas/Character'

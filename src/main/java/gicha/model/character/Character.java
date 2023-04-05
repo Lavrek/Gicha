@@ -1,4 +1,4 @@
-package Gicha.model.character;
+package gicha.model.character;
 
 import lombok.Getter;
 import lombok.Setter;
