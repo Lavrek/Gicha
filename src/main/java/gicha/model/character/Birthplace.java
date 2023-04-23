@@ -12,11 +12,6 @@ public enum Birthplace {
     NATLAN,
     SNEZHNAYA,
     UNIVERSE,
-    UNKNOWN;
-
-    public static Birthplace birthplaceToBirthplaceDto(gicha.Character.BirthplaceEnum newBirthplace) {
-        Birthplace updatedBirthplace;
-        return updatedBirthplace = valueOf(newBirthplace.getValue());
-    }
+    UNKNOWN
 }
 

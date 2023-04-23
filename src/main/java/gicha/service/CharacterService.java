@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class for character controller.
@@ -67,12 +68,13 @@ public class CharacterService {
      * @see List
      */
     public List<Character> getAllCharacters() {
-        List<Character> characterList = characterRepository.findAll().stream()
+
+        return characterRepository.findAll().stream()
                 .map(e -> characterDtoToCharacter.characterDtoToCharacter(e))
-                .toList();
-        if (characterList.size() > 0) {
-            return characterList;
-        } else throw new CharacterNotFoundException();
+                .collect(Collectors.collectingAndThen(Collectors.toList(), result -> {
+                    if (result.isEmpty()) throw new CharacterNotFoundException();
+                    return result;
+                }));
     }
 
     /**
@@ -98,12 +100,12 @@ public class CharacterService {
      * @see List
      */
     public List<Character> getAllCharactersByLocation(Character.BirthplaceEnum birthplaceEnum) {
-        List<Character> characterList = characterRepository.findByBirthplace(Birthplace.birthplaceToBirthplaceDto(birthplaceEnum))
+        return characterRepository.findByBirthplace(Birthplace.valueOf(birthplaceEnum.getValue()))
                 .stream().map((e -> characterDtoToCharacter.characterDtoToCharacter(e)))
-                .toList();
-        if (characterList.size() > 0) {
-            return characterList;
-        } else throw new CharacterNotFoundException();
+                .collect(Collectors.collectingAndThen(Collectors.toList(), result -> {
+                    if (result.isEmpty()) throw new CharacterNotFoundException();
+                    return result;
+                }));
     }
 
     /**
@@ -116,12 +118,12 @@ public class CharacterService {
      * @see List
      */
     public List<Character> getAllCharactersByElement(Character.ElementEnum elementEnum) {
-        List<Character> characterList = characterRepository.findByElement(Element.elementToElementDto(elementEnum)).stream()
+        return characterRepository.findByElement(Element.valueOf(elementEnum.getValue())).stream()
                 .map((e -> characterDtoToCharacter.characterDtoToCharacter(e)))
-                .toList();
-        if (characterList.size() > 0) {
-            return characterList;
-        } else throw new CharacterNotFoundException();
+                .collect(Collectors.collectingAndThen(Collectors.toList(), result -> {
+                    if (result.isEmpty()) throw new CharacterNotFoundException();
+                    return result;
+                }));
     }
 
     /**
@@ -135,8 +137,8 @@ public class CharacterService {
         gicha.model.character.Character existingCharacter = characterRepository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new);
         existingCharacter.setName(character.getName());
-        existingCharacter.setBirthplace(Birthplace.birthplaceToBirthplaceDto(character.getBirthplace()));
-        existingCharacter.setElement(Element.elementToElementDto(character.getElement()));
+        existingCharacter.setBirthplace(Birthplace.valueOf(character.getBirthplace().getValue()));
+        existingCharacter.setElement(Element.valueOf(character.getElement().getValue()));
         return characterDtoToCharacter.characterDtoToCharacter(existingCharacter);
     }
 
