@@ -190,6 +190,8 @@ public class CharacterServiceTest {
         Assert.assertEquals(gicha.Character.BirthplaceEnum.SUMERU, character.getBirthplace());
         Assert.assertEquals(gicha.Character.ElementEnum.HYDRO, character.getElement());
 
+
+
     }
 
     @Test

@@ -44,7 +44,7 @@ public class CharacterService {
      * @see Character
      */
     public Character findById(Long id) {
-        return characterRepository.findById(id).map(e -> characterDtoToCharacter.characterDtoToCharacter(e))
+        return characterRepository.findById(id).map(characterDtoToCharacter::characterDtoToCharacter)
                 .orElseThrow(CharacterNotFoundException::new);
     }
 
@@ -87,7 +87,7 @@ public class CharacterService {
      * @see Character
      */
     public Character getByName(String name) {
-        return characterRepository.findByName(name).map(e -> characterDtoToCharacter.characterDtoToCharacter(e))
+        return characterRepository.findByName(name).map(characterDtoToCharacter::characterDtoToCharacter)
                 .orElseThrow(CharacterNotFoundException::new);
     }
 
@@ -101,7 +101,7 @@ public class CharacterService {
      */
     public List<Character> getAllCharactersByLocation(Character.BirthplaceEnum birthplaceEnum) {
         return characterRepository.findByBirthplace(Birthplace.valueOf(birthplaceEnum.getValue()))
-                .stream().map((e -> characterDtoToCharacter.characterDtoToCharacter(e)))
+                .stream().map((characterDtoToCharacter::characterDtoToCharacter))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), result -> {
                     if (result.isEmpty()) throw new CharacterNotFoundException();
                     return result;
@@ -119,7 +119,7 @@ public class CharacterService {
      */
     public List<Character> getAllCharactersByElement(Character.ElementEnum elementEnum) {
         return characterRepository.findByElement(Element.valueOf(elementEnum.getValue())).stream()
-                .map((e -> characterDtoToCharacter.characterDtoToCharacter(e)))
+                .map((characterDtoToCharacter::characterDtoToCharacter))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), result -> {
                     if (result.isEmpty()) throw new CharacterNotFoundException();
                     return result;
@@ -133,13 +133,16 @@ public class CharacterService {
      * @param id        the character ID
      * @param character modified Character object
      */
+
+
     public Character update(Long id, Character character) {
-        gicha.model.character.Character existingCharacter = characterRepository.findById(id)
-                .orElseThrow(CharacterNotFoundException::new);
-        existingCharacter.setName(character.getName());
-        existingCharacter.setBirthplace(Birthplace.valueOf(character.getBirthplace().getValue()));
-        existingCharacter.setElement(Element.valueOf(character.getElement().getValue()));
-        return characterDtoToCharacter.characterDtoToCharacter(existingCharacter);
+        return characterRepository.findById(id)
+            .map(existingCharacter -> {
+                gicha.model.character.Character updatedCharacter = characterDtoToCharacter.characterToCharacterDto(character);
+                characterRepository.save(updatedCharacter);
+                return characterDtoToCharacter.characterDtoToCharacter(updatedCharacter);
+            })
+            .orElseThrow(CharacterNotFoundException::new);
     }
 
     /**
