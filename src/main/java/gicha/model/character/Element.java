@@ -1,7 +1,5 @@
 package gicha.model.character;
 
-import gicha.Character;
-
 /**
  * Enum class for character element.
  */
@@ -13,10 +11,5 @@ public enum Element {
     HYDRO,
     PYRO,
     CRYO,
-    ADAPTIVE;
-
-    public static Element elementToElementDto(Character.ElementEnum newElement) {
-        Element updatedElement;
-        return updatedElement = valueOf(newElement.getValue());
-    }
+    ADAPTIVE
 }
